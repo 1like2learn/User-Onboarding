@@ -109,10 +109,10 @@ function App() {
 
   return (
     <div>
-      <div>{formErrors.name}</div>
-      <div>{formErrors.email}</div>
-      <div>{formErrors.password}</div>
-      <div>{formErrors.tosAgree}</div>
+      <div id='nameErrors'>{formErrors.name}</div>
+      <div id='emailErrors'>{formErrors.email}</div>
+      <div id='passwordErrors'>{formErrors.password}</div>
+      <div id='tosAgreeErrors'>{formErrors.tosAgree}</div>
 
       <Form 
         values = {formValues} 
