@@ -1,10 +1,10 @@
 import React from 'react'
 
 export default function Form(props){
-    const { values, inputChange} = props
-    console.log(values)
+    const { values, inputChange, submitDisabled, onSubmit, checkboxChange} = props
+    // console.log(props)
     return(
-        <form>
+        <form onSubmit={onSubmit}>
             <label>Name:&nbsp;
                 <input 
                     value={values.name}
@@ -32,14 +32,14 @@ export default function Form(props){
                 />
             </label>
             <label>Terms of Service&nbsp;
-                <input 
-                    value={values.tosAgree}
+                <input
+                    checked={values.tosAgree}
                     onChange={inputChange}
                     name='tosAgree'
                     type='checkbox'
                 />
             </label>
-            <button>Submit</button>
+            <button disabled={submitDisabled}>Submit</button>
         </form>
     )
 }
