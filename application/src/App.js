@@ -4,6 +4,7 @@ import axios from 'axios'
 import './App.css';
 import Form from './Components/Form'
 import formSchema from './validation/formSchema'
+import User from './Components/User'
 
 
 const defaultFormValues = {
@@ -21,16 +22,24 @@ const initialFormErrors = {
 const defaultDisable = true
 
 function App() {
+  //Dimensioning variables
   const [ formValues, setFormValues ] = useState(defaultFormValues)
   const [ formErrors, setFormErrors ] = useState(initialFormErrors)
-  const [submitStatus, setSubmitStatus ] = useState(defaultDisable)
-  
-  // debugger
-  // console.log(formValues)
+  const [ submitStatus, setSubmitStatus ] = useState(defaultDisable)
+  const [ users, setUsers ] = useState([])
 
+  //Functions
+  const getUsers = () => {
+    axios.get(`https://reqres.in/api/users`)
+    .then(response => {
+      setUsers(response.data.data)
+    })
+    .catch(error => {
+      console.error(error);
+    })
+  }
   const inputChange = event => {
     const { name, value, checked, type } = event.target
-    // console.log('event.target', event.target);
     let newValue;
     
     if (type === 'checkbox') {
@@ -39,7 +48,6 @@ function App() {
       newValue = value;
     }
 
-    // console.log(formErrors)
     Yup
     .reach(formSchema, name)
     .validate(newValue)
@@ -62,11 +70,37 @@ function App() {
     })
   }
   
+  const postNewUser = (newUser) => {
+    debugger
+    axios.post(`https://reqres.in/api/users`, JSON.stringify(newUser))
+    .then(() =>{
+      setUsers([...users, newUser])
+      console.log('newUser', newUser)
+    })
+    .catch(error=>{
+    console.error('error', error);
+    })
+    .finally(()=>{
+      setFormValues(defaultFormValues)
+    })
+  }
+
   const onSubmit = event =>{
     event.preventDefault()
-    
+    const newUser = {
+      first_name: formValues.name.trim(),
+      last_name: '',
+      email: formValues.email.trim(),
+    }
+    postNewUser(newUser)
   }
-  
+//Use Effects
+  useEffect(()=>{
+  }, [users])
+  useEffect(() => {
+    getUsers()
+  }, [])
+
   useEffect(() => {
     formSchema.isValid(formValues).then(valid => {
       setSubmitStatus(!valid)
@@ -84,8 +118,13 @@ function App() {
         values = {formValues} 
         inputChange = {inputChange}
         submitDisabled = {submitStatus}
-        onSubmmit = {onSubmit}
+        onSubmit = {onSubmit}
       />
+      {
+        users.map(user => {
+        return (<User key={user.id} user={user} />)
+        })
+      }
     </div>
   );
 }

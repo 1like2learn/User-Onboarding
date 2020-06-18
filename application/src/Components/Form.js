@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Form(props){
-    const { values, inputChange, submitDisabled, onSubmit, checkboxChange} = props
+    const { values, inputChange, submitDisabled, onSubmit} = props
     // console.log(props)
     return(
         <form onSubmit={onSubmit}>
@@ -28,7 +28,7 @@ export default function Form(props){
                     value={values.password}
                     onChange={inputChange}
                     name='password'
-                    type='text'
+                    type='password'
                 />
             </label>
             <label>Terms of Service&nbsp;
